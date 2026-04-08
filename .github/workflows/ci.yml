@@ -1,0 +1,19 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t stm32-toolchain .
+      - name: Lint with cppcheck in container
+        run: docker run --rm -v $(pwd):/workspace -w /workspace stm32-toolchain cppcheck --enable=all --error-exitcode=1 src/
+      - name: Run sanitizer tests in container
+        run: docker run --rm -v $(pwd):/workspace -w /workspace stm32-toolchain bash -c "gcc -fsanitize=address,undefined -o test_runner tests/test_main.c && ./test_runner"
+      - name: Compile firmware in container
+        run:  docker run --rm -v $(pwd):/workspace -w /workspace stm32-toolchain bash -c "mkdir -p build && cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/arm-none-eabi.cmake && cmake --build . --target firmware"
