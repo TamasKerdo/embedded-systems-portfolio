@@ -1,0 +1,17 @@
+{
+  "name": "Embedded Systems Portfolio",
+  "image": "stm32-toolchain:latest",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "marus25.cortex-debug",
+        "usernamehere.errorlens",
+      ]
+    }
+  },
+  "postCreateCommand": "cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+  "remoteUser": "root"
+}

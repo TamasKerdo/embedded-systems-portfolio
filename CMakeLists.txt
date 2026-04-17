@@ -4,3 +4,4 @@ project(stm32_workspace C)
 
 add_executable(firmware src/main.c)
 add_executable(test tests/test_main.c)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
