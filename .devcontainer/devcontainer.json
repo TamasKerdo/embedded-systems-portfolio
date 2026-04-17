@@ -9,7 +9,17 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "marus25.cortex-debug",
         "usernamehere.errorlens",
-      ]
+      ],
+      "settings": {
+        "editor.quickSuggestions": {
+          "other": "off",
+          "comments": "off",
+          "strings": "off"
+        },
+        "editor.suggestOnTriggerCharacters": false,
+        "editor.acceptSuggestionOnEnter": "off",
+        "editor.tabCompletion": "off"
+      }
     }
   },
   "postCreateCommand": "cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
