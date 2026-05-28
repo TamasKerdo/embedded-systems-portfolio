@@ -13,23 +13,23 @@ text    data     bss     dec     hex     filename
 526     256      256    1038     40e     day06_memory.o
 */
 
-const uint8_t a[256];                         // -> .rodata (const but uninitialized — compiler zero-inits)
-const uint8_t b[256] = { 0, 1, 2 /* ... */ }; // -> .rodata (const initialized — stays in flash)
+const uint8_t a[256];                       // -> .rodata (const but uninitialized — compiler zero-inits)
+const uint8_t b[256] = {0, 1, 2 /* ... */}; // -> .rodata (const initialized — stays in flash)
 
-uint8_t c[256] = {0};                         // -> 256 bytes .bss  (explicitly zero-initialized global)
-uint8_t d[256] = { 0, 1, 2 /* ... */ };       // -> 256 bytes .data (initialized global)
-char e[5] = "Hello";                          // -> 5 bytes   .data (initialized global)
-int f = 17618;   // 0x44d2                    // -> 4 bytes   .data (initialized global)
+uint8_t c[256] = {0};                 // -> 256 bytes .bss  (explicitly zero-initialized global)
+uint8_t d[256] = {0, 1, 2 /* ... */}; // -> 256 bytes .data (initialized global)
+char e[5] = "Hello";                  // -> 5 bytes   .data (initialized global)
+int f = 17618;                        // 0x44d2                    // -> 4 bytes   .data (initialized global)
 
-int main(void) {
-    uint8_t e = 12; // -> stack (local variable, exists only during main() execution)
-                    // not visible in objdump — allocated at runtime via SP adjustment
-    return 0;
+int main(void)
+{
+  uint8_t e = 12; // -> stack (local variable, exists only during main() execution)
+                  // not visible in objdump — allocated at runtime via SP adjustment
+  return 0;
 }
 
-
 /*
-arm-none-eabi-nm day06_memory.o 
+arm-none-eabi-nm day06_memory.o
 00000000 R a
 00000100 R b //256 bytes later
 00000000 B c

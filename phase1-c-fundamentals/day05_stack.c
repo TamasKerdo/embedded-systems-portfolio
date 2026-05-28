@@ -11,7 +11,7 @@
  * Build (ARM cross-compile):
  *   arm-none-eabi-gcc -Wall -Wextra -o day05.elf day05_stack.c
  */
- 
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -25,36 +25,37 @@
  * Always prefer const pointer for structs in embedded code.
  */
 
- typedef struct {
-    uint32_t a;
-    uint32_t b;
-    uint32_t c;
-} MyStruct;  /* 12 bytes */
- 
+typedef struct
+{
+  uint32_t a;
+  uint32_t b;
+  uint32_t c;
+} MyStruct; /* 12 bytes */
+
 static void pass_by_value(MyStruct s)
 {
-    /* sizeof(s) gives the full struct size — 12 bytes pushed onto stack */
-    printf("By value   — bytes pushed onto stack: %zu\n", sizeof(s));
+  /* sizeof(s) gives the full struct size — 12 bytes pushed onto stack */
+  printf("By value   — bytes pushed onto stack: %zu\n", sizeof(s));
 }
- 
+
 static void pass_by_pointer(const MyStruct *s)
 {
-    /* sizeof(s) gives pointer size — 4 bytes on STM32, 8 on host */
-    /* sizeof(*s) gives the actual struct size */
-    printf("By pointer — bytes pushed onto stack: %zu\n", sizeof(s));
-    printf("             actual struct size:       %zu\n", sizeof(*s));
+  /* sizeof(s) gives pointer size — 4 bytes on STM32, 8 on host */
+  /* sizeof(*s) gives the actual struct size */
+  printf("By pointer — bytes pushed onto stack: %zu\n", sizeof(s));
+  printf("             actual struct size:       %zu\n", sizeof(*s));
 }
- 
+
 static void demo_pass_by(void)
 {
-    printf("=== 1. Pass By Value vs Pointer ===\n");
- 
-    MyStruct s = {.a = 1, .b = 2, .c = 3};
- 
-    pass_by_value(s);
-    pass_by_pointer(&s);
- 
-    printf("\n");
+  printf("=== 1. Pass By Value vs Pointer ===\n");
+
+  MyStruct s = {.a = 1, .b = 2, .c = 3};
+
+  pass_by_value(s);
+  pass_by_pointer(&s);
+
+  printf("\n");
 }
 
 /*
@@ -67,23 +68,23 @@ static void demo_pass_by(void)
  *
  * Common pattern in STM32 HAL for small utility functions.
  */
- 
+
 static inline uint32_t clamp(uint32_t val, uint32_t max)
 {
-    return val > max ? max : val;
+  return val > max ? max : val;
 }
- 
+
 static void demo_static_inline(void)
 {
-    printf("=== 2. Static Inline ===\n");
- 
-    printf("clamp(10, 5)  = %u\n", clamp(10, 5));
-    printf("clamp(3, 5)   = %u\n", clamp(3, 5));
-    printf("clamp(5, 5)   = %u\n", clamp(5, 5));
- 
-    printf("\n");
+  printf("=== 2. Static Inline ===\n");
+
+  printf("clamp(10, 5)  = %u\n", clamp(10, 5));
+  printf("clamp(3, 5)   = %u\n", clamp(3, 5));
+  printf("clamp(5, 5)   = %u\n", clamp(5, 5));
+
+  printf("\n");
 }
- 
+
 /*
  * 3. STACK OVERFLOW RISK
  *
@@ -109,29 +110,29 @@ static void demo_static_inline(void)
  * Use the ARM stack usage report to verify frame sizes:
  *   arm-none-eabi-gcc -fstack-usage day05_stack.c
  */
- 
+
 static void demo_stack_overflow_risk(void)
 {
-    printf("=== 3. Stack Overflow Risk ===\n");
- 
-    /* safe: static buffer lives in .bss, not on the stack */
-    static uint8_t buf[4096];
-    buf[0]    = 0xFF;
-    buf[4095] = 0xFF;
- 
-    printf("static buf[0]    = 0x%02X\n", buf[0]);
-    printf("static buf[4095] = 0x%02X\n", buf[4095]);
-    printf("stack cost of this buffer: 0 bytes (static → .bss)\n");
- 
-    printf("\n");
+  printf("=== 3. Stack Overflow Risk ===\n");
+
+  /* safe: static buffer lives in .bss, not on the stack */
+  static uint8_t buf[4096];
+  buf[0] = 0xFF;
+  buf[4095] = 0xFF;
+
+  printf("static buf[0]    = 0x%02X\n", buf[0]);
+  printf("static buf[4095] = 0x%02X\n", buf[4095]);
+  printf("stack cost of this buffer: 0 bytes (static → .bss)\n");
+
+  printf("\n");
 }
- 
+
 int main(void)
 {
-    demo_pass_by();
-    demo_static_inline();
-    demo_stack_overflow_risk();
- 
-    printf("All demos complete. ASAN/UBSAN should report no errors.\n");
-    return 0;
+  demo_pass_by();
+  demo_static_inline();
+  demo_stack_overflow_risk();
+
+  printf("All demos complete. ASAN/UBSAN should report no errors.\n");
+  return 0;
 }
