@@ -1,4 +1,4 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <stddef.h>
 
 typedef enum
@@ -35,28 +35,28 @@ static const state_handler_t jump_table[NUM_STATES] = {
 
 state_t stopping(event_t e)
 {
-  printf("Event: %d, Stopping..\n", e);
+  //printf("Event: %d, Stopping..\n", e);
 
   return GREEN;
 }
 
 state_t trespassing(event_t e)
 {
-  printf("Event: %d, Trespassing..\n", e);
+  //printf("Event: %d, Trespassing..\n", e);
 
   return YELLOW;
 }
 
 state_t preparing(event_t e)
 {
-  printf("Event: %d, Preparing..\n", e);
+  //printf("Event: %d, Preparing..\n", e);
 
   return RED;
 }
 
 state_t trespassing_with_care(event_t e)
 {
-  printf("Event: %d, Trespassing with care..\n", e);
+  //printf("Event: %d, Trespassing with care..\n", e);
 
   return FLASHING;
 }
@@ -65,12 +65,12 @@ state_t run_event(event_t e)
 {
   if (e == EV_NIGHT_MODE_ON)
   {
-    printf("Event: %d, NIGHT MODE ON setted..\n", e);
+    //printf("Event: %d, NIGHT MODE ON setted..\n", e);
     current_state = FLASHING;
   }
   else if (e == EV_NIGHT_MODE_OFF)
   {
-    printf("Event: %d, NIGHT MODE OFF setted..\n", e);
+    //printf("Event: %d, NIGHT MODE OFF setted..\n", e);
     current_state = RED;
   }
   else
@@ -83,7 +83,7 @@ state_t run_event(event_t e)
 
 int main(void)
 {
-  printf("Initial state number: %d\n", current_state);
+  //printf("Initial state number: %d\n", current_state);
 
   for (int i = 0; i < 10; i++)
   {
@@ -95,10 +95,21 @@ int main(void)
     {
       run_event(EV_NIGHT_MODE_OFF);
     }
-    printf("State set to: %d\n", run_event(EV_TICK));
+    //printf("State set to: %d\n", run_event(EV_TICK));
   }
 
-  printf("State machine finished.\n");
+  //printf("State machine finished.\n");
 
   return 0;
 }
+
+/* commands:
+arm-none-eabi-gcc ./phase1-c-fundamentals/day07_state_machine.c -c -o day07_state_machine_comp.o // compile without linking
+objdump -z -s ./day07_state_machine_comp.o                                                       // decompress compressed parts (-z),
+                                                                                                 // display the full contents of sections (-s) 
+
+objdump -s -j .rodata ./day07_state_machine_comp.o
+
+Contents of section .rodata:
+ 0000 00000000 00000000 00000000 00000000  ................ // Memory is allocated for the jump_table but not filled with real addresses. -> Linker phase.
+*/ 
