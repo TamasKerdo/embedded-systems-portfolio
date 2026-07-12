@@ -1,13 +1,6 @@
 # Embedded Systems Portfolio
 
-A structured embedded systems learning portfolio documenting a career transition from backend software engineering into embedded software engineering, targeting the Austrian market (TTTech, Frequentis, Kapsch, Tractive, OMICRON, Fronius, Elektrobit).
-
-## Background
-
-- **Education:** Electrical Engineering degree
-- **Professional background:** 7 years Ruby on Rails backend development (TDD, CI/CD, REST APIs)
-- **Prior industry experience:** Bosch (automotive domain, CAN bus)
-- **Target domain:** Embedded software engineering — bare-metal, RTOS, Embedded Linux, automotive/safety-critical
+A structured embedded systems learning portfolio documenting a career transition from backend software engineering into embedded software engineering.
 
 ## Learning Roadmap
 
@@ -74,24 +67,6 @@ Pipeline is designed to **fail fast** — cheap checks (lint, tests) run before 
 | 2x CP2102 USB-UART adapters | UART debug output |
 | Raspberry Pi 4 | Embedded Linux development — Phase 3 |
 | 2x SN65HVD230 CAN transceivers | CAN bus logger — Phase 4 |
-
-## Repository Structure
-
-```
-├── Dockerfile                   # ARM toolchain image
-├── CMakeLists.txt               # Build system
-├── cmake/
-│   └── arm-none-eabi.cmake      # Cross-compilation toolchain file
-├── src/
-│   └── main.c                   # Application code
-├── tests/
-│   └── test_main.c              # Host-side sanitizer tests
-├── phase1-c-fundamentals/       # Phase 1 daily C exercises
-│   └── ...                      # Pointers, structs, bitfields, MISRA etc.
-└── .github/
-    └── workflows/
-        └── ci.yml               # GitHub Actions pipeline
-```
 
 > **Portfolio projects** (Phase 2 onward) live in separate repositories, each with their own pipeline:
 > - [`freertos-sensor-node`](https://github.com/TamasKerdo/freertos-sensor-node) — Phase 2
